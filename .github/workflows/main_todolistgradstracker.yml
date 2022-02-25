@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'TodoListGradsTracker'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_81CBD70EDC2144E8906D3CBB3D4C4FEB }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5C4F7F5BC53B4CD0989F2643C5D56788 }}
           package: .
