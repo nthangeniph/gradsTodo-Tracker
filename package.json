@@ -2,9 +2,9 @@
   "name": "gradstodo-tracker",
   "version": "1.0.0",
   "description": "tasks manager",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "author": "Nthangeni Phumudzo",
   "license": "ISC",

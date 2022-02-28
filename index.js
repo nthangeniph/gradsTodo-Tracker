@@ -17,7 +17,7 @@ const options = {
     },
     servers: [
       {
-        url: "https://todolistgradstracker.azurewebsites.net",
+        url: "https://localhost:3000",
       },
     ],
   },
