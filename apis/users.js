@@ -1,5 +1,5 @@
 const express = require("express");
-const dboperations = require("./tasks");
+const dboperations = require("../routes/tasks");
 const { nanoid } = require("nanoid");
 
 const idLength = 8;
@@ -10,58 +10,63 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
- *     Task:
+ *     User:
  *       type: object
  *       required:
- *         - Task
- *         - Priority
+ *         - Email
+ *         - Password
  *       properties:
  *         Id:
  *           type: string
- *           description: The auto-generated id of the task
- *         Task:
+ *           description: The auto-generated id of the user
+ *         FirstName:
  *           type: string
- *           description: The task title
- *         Status:
- *           type: int
- *           description: progress of the task
- *         Priority:
- *           type:int
- *           description:level of urgency
- *         IsDeleted:
- *            type:int
- *            description:check if soft deleted
+ *           description: The firstName of the user
+ *         LastName:
+ *           type: string
+ *           description: lastName of the user
+ *         Email:
+ *           type:string
+ *           description:email of the user
+ *         Password:
+ *            type:string
+ *            description:user's strong password
+ *         UserType:
+ *           type:string
+ *           description:user's role
+ *
  *
  *       example:
  *         Id: d5fE_asz
- *         Task: azure labs new todo on the list
- *         Priority: 1
- *         Status: 3
- *         IsDeleted: 0
+ *         Email: userName
+ *         FirstName: Phumudzo
+ *         LastName: Nthangeni
+ *         UserType: Admin
+ *         Password: 123qwe
  */
 
 /**
  * @swagger
  * tags:
- *   name: Tasks
- *   description: Todo List Tracker Api
+ *   name: Users
+ *   description: users apis
  */
 
 /**
  * @swagger
- * /tasks:
+ * /users:
  *   get:
- *     summary: Returns the list of all the Activities
- *     tags: [Tasks]
+ *     summary: Returns the list of all the registered users
+ *     tags: [Users]
  *     responses:
  *       200:
- *         description: The list of the activities
+ *         description: The list of the registered users
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Task'
+ *                 $ref: '#/components/schemas/User'
  */
 
 router.get("/", (req, res) => {
@@ -71,24 +76,24 @@ router.get("/", (req, res) => {
 });
 /**
  * @swagger
- * /tasks/{id}:
+ * /users/{id}:
  *   get:
- *     summary: get the task based on id
- *     tags: [Tasks]
+ *     summary: get the user based on id
+ *     tags: [Users]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The task id
+ *         description: The user's id
  *     responses:
  *       200:
- *         description: The task description by id
+ *         description: The user description by id
  *         contens:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Task'
+ *               $ref: '#/components/schemas/User'
  *       404:
  *         description: The task was not found
  */
@@ -101,23 +106,23 @@ router.get("/:id", (req, res) => {
 
 /**
  * @swagger
- * /tasks:
+ * /users:
  *   post:
- *     summary: Create a new task
- *     tags: [Tasks]
+ *     summary: Create a new user
+ *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Task'
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
  *         description: The task was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Task'
+ *               $ref: '#/components/schemas/User'
  *       500:
  *         description: Some server error
  */
@@ -142,32 +147,32 @@ router.post("/", (req, res) => {
 
 /**
  * @swagger
- * /tasks/{id}:
+ * /users/{id}:
  *  put:
- *    summary: Update the task by the id
- *    tags: [Tasks]
+ *    summary: Update the user by the id
+ *    tags: [Users]
  *    parameters:
  *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The task id
+ *        description: The user id
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Task'
+ *            $ref: '#/components/schemas/User'
  *    responses:
  *      200:
- *        description: The task was updated
+ *        description: The user was updated
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Task'
+ *              $ref: '#/components/schemas/User'
  *      404:
- *        description: The task was not found
+ *        description: The user was not found
  *      500:
  *        description: Some error happened
  */
@@ -191,23 +196,23 @@ router.put("/:id", (req, res) => {
 
 /**
  * @swagger
- * /tasks/{id}:
+ * /users/{id}:
  *   delete:
- *     summary: Remove the task by id
- *     tags: [Tasks]
+ *     summary: Remove the user by id
+ *     tags: [Users]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The task id
+ *         description: The user id
  *
  *     responses:
  *       200:
- *         description: The task was deleted
+ *         description: The user was deleted
  *       404:
- *         description: The task was not found
+ *         description: The user was not found
  */
 
 router.delete("/:id", (req, res) => {

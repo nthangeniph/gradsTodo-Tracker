@@ -16,6 +16,7 @@
     "morgan": "^1.10.0",
     "mssql": "^8.0.2",
     "nanoid": "^3.1.20",
+    "nodemon": "^2.0.15",
     "swagger-jsdoc": "^6.0.1",
     "swagger-ui-express": "^4.1.6",
     "tedious": "^14.3.0"

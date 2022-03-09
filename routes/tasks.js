@@ -31,8 +31,8 @@ async function createTask(postTask) {
     let task = await sql.connect(config);
     let insertTask = await task
       .request()
-      .input("Id", sql.NVarChar, postTask.Id)
-      .input("Task", sql.NVarChar, postTask.Task)
+      .input("Id", sql.NVarChar(255), postTask.Id)
+      .input("Task", sql.NVarChar(255), postTask.Task)
       .input("Status", sql.Int, postTask.Status)
       .input("Priority", sql.Int, postTask.Priority)
       .input("IsDeleted", sql.Int, postTask.IsDeleted)
