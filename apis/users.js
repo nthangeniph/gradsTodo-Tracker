@@ -1,6 +1,8 @@
 const express = require("express");
-const dboperations = require("../routes/tasks");
+const dboperations = require("../routes/users");
 const { nanoid } = require("nanoid");
+
+const bcrypt = require("bcrypt");
 
 const idLength = 8;
 
@@ -32,7 +34,7 @@ const router = express.Router();
  *            type:string
  *            description:user's strong password
  *         UserType:
- *           type:string
+ *           type:Int
  *           description:user's role
  *
  *
@@ -41,7 +43,7 @@ const router = express.Router();
  *         Email: userName
  *         FirstName: Phumudzo
  *         LastName: Nthangeni
- *         UserType: Admin
+ *         UserType: 1
  *         Password: 123qwe
  */
 
@@ -70,7 +72,7 @@ const router = express.Router();
  */
 
 router.get("/", (req, res) => {
-  dboperations.getAllTasks().then((result) => {
+  dboperations.getAllUsers().then((result) => {
     res.status(200).json(result[0]);
   });
 });
@@ -99,7 +101,7 @@ router.get("/", (req, res) => {
  */
 
 router.get("/:id", (req, res) => {
-  dboperations.getTaskById(req.params.id).then((result) => {
+  dboperations.getUserById(req.params.id).then((result) => {
     res.status(200).json(result[0]);
   });
 });
@@ -123,26 +125,45 @@ router.get("/:id", (req, res) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
+ *       409:
+ *         description: he request could not be processed because of conflict in the request
  *       500:
  *         description: Some server error
  */
 
-router.post("/", (req, res) => {
-  let task = {
-    Id: nanoid(idLength),
-    Task: req.body.Task,
-    Status: req.body.Status,
-    Priority: req.body.Priority,
-    IsDeleted: req.body.IsDeleted,
-  };
+router.post("/", (req, res, next) => {
+  bcrypt.hash(req.body.Password, 10, (err, hash) => {
+    if (err) {
+      return res.status(500).json({
+        error: err,
+      });
+    } else {
+      let user = {
+        Id: nanoid(idLength),
+        Email: req.body.Email,
+        FirstName: req.body.FirstName,
+        LastName: req.body.LastName,
+        UserType: req.body.UserType,
+        Password: hash,
+      };
 
-  try {
-    dboperations.createTask(task).then((result) => {
-      res.status(200).json(result);
-    });
-  } catch (error) {
-    return res.status(500).send(error);
-  }
+      try {
+        dboperations.validateUniqueUser(req.body.Email).then((response) => {
+          if (!response) {
+            dboperations.signUp(user).then((result) => {
+              return res.status(200).json(result);
+            });
+          } else {
+            return res.status(409).json({
+              message: `user with ${req.body.Email} already exists`,
+            });
+          }
+        });
+      } catch (err) {
+        return res.status(500).send(err);
+      }
+    }
+  });
 });
 
 /**
@@ -186,7 +207,7 @@ router.put("/:id", (req, res) => {
     IsDeleted: req.body.IsDeleted,
   };
   try {
-    dboperations.updateTask(task).then((result) => {
+    dboperations.updateUser(task).then((result) => {
       res.status(200).json(result);
     });
   } catch (error) {
@@ -217,7 +238,7 @@ router.put("/:id", (req, res) => {
 
 router.delete("/:id", (req, res) => {
   try {
-    dboperations.deleteTask(req.params.id).then((result) => {
+    dboperations.deleteUser(req.params.id).then((result) => {
       res.status(200).json(result);
     });
   } catch (error) {

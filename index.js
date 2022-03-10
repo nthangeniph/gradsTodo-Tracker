@@ -4,6 +4,7 @@ const cors = require("cors");
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const todosRouter = require("./apis/apis");
+const usersRouter = require("./apis/users");
 
 const PORT = 443;
 
@@ -33,5 +34,6 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use("/tasks", todosRouter);
+app.use("/users", usersRouter);
 
 app.listen(PORT, () => console.log(`The server is running on port ${PORT}`));
